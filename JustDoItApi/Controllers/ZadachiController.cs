@@ -1,23 +1,28 @@
+using JustDoItApi.Interfaces;
 using JustDoItApi.Models.Zadachi;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace JustDoItApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ZadachiController : ControllerBase
+    public class ZadachiController (IZadachiService zadachiService) : ControllerBase
     {
 
         [HttpGet()]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var items = new List<ZadachaItemModel> { 
-                new ZadachaItemModel() { Id = 1, Name = "ѕисати код", Image = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Dog_Breeds.jpg/1024px-Dog_Breeds.jpg" },
-                new ZadachaItemModel() { Id = 2, Name = "ѕисати б≥льше коду!", Image = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Dog_Breeds.jpg/1024px-Dog_Breeds.jpg" },
-                new ZadachaItemModel() { Id = 3, Name = "ѕисати ще б≥льше коду!!!", Image = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Dog_Breeds.jpg/1024px-Dog_Breeds.jpg" }
-            };
+            var items = await zadachiService.GetAllAsync();
 
             return Ok(items);
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> Post([FromForm] ZadachaCreateModel model)
+        {
+            await zadachiService.CreateZadachyAsync(model);
+            return Ok(model);
         }
     }
 }
