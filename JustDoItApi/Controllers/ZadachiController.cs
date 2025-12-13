@@ -21,8 +21,8 @@ namespace JustDoItApi.Controllers
         [HttpPost()]
         public async Task<IActionResult> Post([FromForm] ZadachaCreateModel model)
         {
-            await zadachiService.CreateZadachyAsync(model);
-            return Ok(model);
+            var res = await zadachiService.CreateZadachyAsync(model);
+            return Ok(res);
         }
     }
 }
