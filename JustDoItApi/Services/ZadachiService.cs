@@ -22,6 +22,39 @@ public class ZadachiService(AppDbContext context, IMapper mapper, IImageService 
         return zadachaModel;
     }
 
+    public async Task<bool> DeleteRangeZadachiAsync(List<long> ids)
+    {
+        var zadachiEntities = context.Zadachi.Where(x => ids.Contains(x.Id)).ToList();
+        if (zadachiEntities.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (var zadachaEntity in zadachiEntities)
+        {
+            await imageService.DeleteImageAsync(zadachaEntity.Image);
+        }
+
+        context.Zadachi.RemoveRange(zadachiEntities);
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> DeleteZadachyAsync(long id)
+    {
+        var zadachaEntity = await context.Zadachi.FirstOrDefaultAsync(x => x.Id == id);
+        if (zadachaEntity == null)
+        {
+            return false;
+        }
+
+        await imageService.DeleteImageAsync(zadachaEntity.Image);
+
+        context.Zadachi.Remove(zadachaEntity);
+        await context.SaveChangesAsync();
+        return true;
+    }
+
     public async Task<IEnumerable<ZadachaItemModel>> GetAllAsync()
     {
         var zadachy = await context.Zadachi.ToListAsync();

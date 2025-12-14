@@ -24,5 +24,27 @@ namespace JustDoItApi.Controllers
             var res = await zadachiService.CreateZadachyAsync(model);
             return Ok(res);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            var res = await zadachiService.DeleteZadachyAsync(id);
+            if (!res)
+            {
+                return NotFound();
+            }
+            return Ok();
+        }
+
+        [HttpDelete("range")]
+        public async Task<IActionResult> DeleteRange([FromBody] List<long> ids)
+        {
+            var res = await zadachiService.DeleteRangeZadachiAsync(ids);
+            if (!res)
+            {
+                return NotFound();
+            }
+            return Ok();
+        }
     }
 }
