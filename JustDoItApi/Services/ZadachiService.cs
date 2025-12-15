@@ -61,4 +61,22 @@ public class ZadachiService(AppDbContext context, IMapper mapper, IImageService 
         var zadachyModels = mapper.Map<IEnumerable<ZadachaItemModel>>(zadachy);
         return zadachyModels;
     }
+
+    public async Task<bool> UpdateZadachyAsync(ZadachaUpdateModel model)
+    {
+        var zadachaEntity = context.Zadachi.FirstOrDefault(x => x.Id == model.Id);
+        if (zadachaEntity == null)
+        {
+            return false;
+        }
+        zadachaEntity = mapper.Map(model, zadachaEntity);
+        if (model.Image != null)
+        {
+            await imageService.DeleteImageAsync(zadachaEntity.Image);
+            zadachaEntity.Image = await imageService.SaveImageAsync(model.Image);
+        }
+        context.Zadachi.Update(zadachaEntity);
+        await context.SaveChangesAsync();
+        return true;
+    }
 }

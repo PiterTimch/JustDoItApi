@@ -46,5 +46,16 @@ namespace JustDoItApi.Controllers
             }
             return Ok();
         }
+
+        [HttpPut()]
+        public async Task<IActionResult> Put([FromForm] ZadachaUpdateModel model)
+        {
+            var res = await zadachiService.UpdateZadachyAsync(model);
+            if (!res)
+            {
+                return NotFound();
+            }
+            return Ok();
+        }
     }
 }

@@ -8,4 +8,5 @@ public interface IZadachiService
     Task<ZadachaItemModel> CreateZadachyAsync(ZadachaCreateModel model);
     Task<bool> DeleteZadachyAsync(long id);
     Task<bool> DeleteRangeZadachiAsync(List<long> ids);
+    Task<bool> UpdateZadachyAsync(ZadachaUpdateModel model);
 }
