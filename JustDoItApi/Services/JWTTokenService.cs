@@ -1,4 +1,5 @@
 ﻿using JustDoItApi.Entities.Identity;
+using JustDoItApi.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,7 +8,7 @@ using System.Security.Claims;
 namespace JustDoItApi.Services;
 
 public class JWTTokenService(IConfiguration configuration,
-    UserManager<UserEntity> userManager)
+    UserManager<UserEntity> userManager) : IJWTTokenService
 {
     public async Task<string> CreateTokenAsync(UserEntity user)
     {
