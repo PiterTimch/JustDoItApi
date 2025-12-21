@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace JustDoItApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AuthController (IAuthService authService) : ControllerBase
     {
         [HttpPost("login")]
