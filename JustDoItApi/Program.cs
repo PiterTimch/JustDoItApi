@@ -76,4 +76,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+await app.SeedData();
+
 app.Run();
