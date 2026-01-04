@@ -55,7 +55,6 @@ public class AuthService(
         }
 
         await userManager.AddToRoleAsync(user, DefaultRole);
-
         return await tokenService.CreateTokenAsync(user);
     }
 }
