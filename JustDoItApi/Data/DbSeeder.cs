@@ -11,7 +11,7 @@ namespace JustDoItApi.Data;
 
 public static class DbSeeder
 {
-    public static async Task SeedData(this WebApplication webApplication)
+    public static async Task SeedDataAsync(this WebApplication webApplication)
     {
         using var scope = webApplication.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
