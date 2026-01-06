@@ -14,6 +14,17 @@ namespace JustDoItApi.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             string result = await authService.LoginAsync(model);
+
+            if (string.IsNullOrEmpty(result))
+            {
+                return BadRequest(new
+                {
+                    Status = 400,
+                    IsValid = false,
+                    Errors = new { Email = "Невірний логін або пароль" }
+                });
+            }
+
             return Ok(new
             {
                 Token = result
