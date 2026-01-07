@@ -21,6 +21,9 @@ public class ZadachiService(AppDbContext context,
 
         zadachaEntity.Image = await imageService.SaveImageAsync(model.Image);
 
+        long userId = await identityService.GetUserIdAsync();
+        zadachaEntity.UserId = userId;
+
         context.Zadachi.Add(zadachaEntity);
         await context.SaveChangesAsync();
 
