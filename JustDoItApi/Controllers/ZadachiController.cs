@@ -1,10 +1,12 @@
 using JustDoItApi.Interfaces;
 using JustDoItApi.Models.Zadachi;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace JustDoItApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ZadachiController (IZadachiService zadachiService) : ControllerBase

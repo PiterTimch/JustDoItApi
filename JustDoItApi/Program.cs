@@ -7,26 +7,45 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "JustDoIt API",
+        Version = "v1"
+    });
 
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme.",
         Name = "Authorization",
-        In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
-        Scheme = "bearer"
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter JWT token"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
     });
 });
 
@@ -46,22 +65,35 @@ builder.Services
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateIssuerSigningKey = true,
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        };
-    });
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateIssuerSigningKey = true,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+    };
+});
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return Task.CompletedTask;
+    };
+});
 
 builder.Services.AddScoped<IZadachiService, ZadachiService>();
 builder.Services.AddScoped<IImageService, ImageService>();

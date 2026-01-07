@@ -1,13 +1,19 @@
 ﻿using AutoMapper;
 using JustDoItApi.Data;
 using JustDoItApi.Entities;
+using JustDoItApi.Entities.Identity;
 using JustDoItApi.Interfaces;
 using JustDoItApi.Models.Zadachi;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace JustDoItApi.Services;
 
-public class ZadachiService(AppDbContext context, IMapper mapper, IImageService imageService) : IZadachiService
+public class ZadachiService(AppDbContext context, 
+    IMapper mapper, 
+    IImageService imageService, 
+    IIdentityService identityService,
+    UserManager<UserEntity> userManager) : IZadachiService
 {
     public async Task<ZadachaItemModel> CreateZadachyAsync(ZadachaCreateModel model)
     {
@@ -57,7 +63,9 @@ public class ZadachiService(AppDbContext context, IMapper mapper, IImageService 
 
     public async Task<IEnumerable<ZadachaItemModel>> GetAllAsync()
     {
-        var zadachy = await context.Zadachi.ToListAsync();
+        long userId = await identityService.GetUserIdAsync();
+
+        var zadachy = await context.Zadachi.Where(x => x.UserId == userId).ToListAsync();
         var zadachyModels = mapper.Map<IEnumerable<ZadachaItemModel>>(zadachy);
         return zadachyModels;
     }
