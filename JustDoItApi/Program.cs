@@ -19,7 +19,6 @@ builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
-        // Ensure instances exist
         document.Components ??= new OpenApiComponents();
         document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
 
@@ -33,7 +32,6 @@ builder.Services.AddOpenApi(options =>
             Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\""
         };
 
-        // Apply security requirement globally
         document.Security = [
             new OpenApiSecurityRequirement
             {
@@ -44,8 +42,6 @@ builder.Services.AddOpenApi(options =>
             }
         ];
 
-        // Set the host document for all elements
-        // including the security scheme references
         document.SetReferenceHostDocument();
 
         return Task.CompletedTask;
@@ -89,15 +85,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Events.OnRedirectToLogin = context =>
-    {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        return Task.CompletedTask;
-    };
-});
-
 builder.Services.AddScoped<IZadachiService, ZadachiService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -109,9 +96,6 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 app.MapOpenApi();
-
-//app.UseSwagger();
-//app.UseSwaggerUI();
 
 app.UseSwaggerUI(options =>
 {
