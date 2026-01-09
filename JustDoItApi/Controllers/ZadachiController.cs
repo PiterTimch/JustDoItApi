@@ -21,6 +21,7 @@ namespace JustDoItApi.Controllers
         }
 
         [HttpPost()]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Post([FromForm] ZadachaCreateModel model)
         {
             var res = await zadachiService.CreateZadachyAsync(model);
@@ -50,6 +51,7 @@ namespace JustDoItApi.Controllers
         }
 
         [HttpPut()]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Put([FromForm] ZadachaUpdateModel model)
         {
             var res = await zadachiService.UpdateZadachyAsync(model);

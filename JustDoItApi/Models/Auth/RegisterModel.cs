@@ -1,4 +1,6 @@
-﻿namespace JustDoItApi.Models.Auth;
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace JustDoItApi.Models.Auth;
 
 public class RegisterModel
 {
@@ -10,5 +12,6 @@ public class RegisterModel
 
     public string Password { get; set; } = string.Empty;
 
+    [FromForm]
     public IFormFile? ImageFile { get; set; } = null;
 }

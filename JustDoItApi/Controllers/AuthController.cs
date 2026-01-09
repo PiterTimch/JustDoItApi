@@ -32,6 +32,7 @@ namespace JustDoItApi.Controllers
         }
 
         [HttpPost("register")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Register([FromForm] RegisterModel model)
         {
             string result = await authService.RegisterAsync(model);
