@@ -6,7 +6,7 @@ networks:
 
 services:
   db:
-    image: postgres:17
+    image: postgres:18.1
     container_name: bolto-db-container
     restart: unless-stopped
     ports:
@@ -16,7 +16,7 @@ services:
       POSTGRES_USER: bolto-user
       POSTGRES_PASSWORD: "sdfsd#rfetDGFDGd5ftydewftyd5y%$"
     volumes:
-      - /data/bolto/postgres:/var/lib/postgresql/data
+      - /data/bolto/postgres:/var/lib/postgresql
     networks:
       - bolt_net
 
