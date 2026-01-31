@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JustDoItApi.Constants;
+using JustDoItApi.Entities.Chat;
 using JustDoItApi.Entities.Identity;
 using JustDoItApi.Interfaces;
 using JustDoItApi.Models.Seeder;
@@ -81,6 +82,18 @@ public static class DbSeeder
             {
                 Console.WriteLine("Not Found File Categories.json");
             }
+        }
+
+        if (!context.ChatTypes.Any())
+        {
+            var types = ChatTypes.All
+                .Select(x => new ChatTypeEntity
+                {
+                    TypeName = x
+                }).ToList();
+
+            context.ChatTypes.AddRange(types);
+            await context.SaveChangesAsync();
         }
     }
 }

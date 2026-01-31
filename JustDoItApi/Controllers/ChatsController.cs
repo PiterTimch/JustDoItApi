@@ -16,4 +16,11 @@ public class ChatsController(IChatService chatService) : ControllerBase
         var chatId = await chatService.CreateChatAsync(model);
         return Ok(chatId);
     }
+
+    [HttpGet("types")]
+    public async Task<IActionResult> GetChatTypes()
+    {
+        var types = await chatService.GetAllTypes();
+        return Ok(types);
+    }
 }

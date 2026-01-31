@@ -36,6 +36,14 @@ public class ChatService(
         return chat.Id;
     }
 
+    public Task<List<ChatTypeItemModel>> GetAllTypes()
+    {
+        return context.ChatTypes
+            .AsNoTracking()
+            .Select(ct => mapper.Map<ChatTypeItemModel>(ct))
+            .ToListAsync();
+    }
+
     public async Task<ChatMessageModel> SendMessageAsync(SendMessageModel model)
     {
         var userId = await identityService.GetUserIdAsync();

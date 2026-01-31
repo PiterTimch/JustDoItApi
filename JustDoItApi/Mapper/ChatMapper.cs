@@ -9,5 +9,6 @@ public class ChatMapper : Profile
     public ChatMapper()
     {
         CreateMap<ChatMessageEntity, ChatMessageModel>();
+        CreateMap<ChatTypeEntity, ChatTypeItemModel>();
     }
 }
