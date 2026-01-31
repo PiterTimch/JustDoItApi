@@ -16,7 +16,7 @@ public class ChatService(
     {
         var userId = await identityService.GetUserIdAsync();
 
-        var chat = new ChatEntity
+        var chat = new ChatEntity // переробити на мапер
         {
             Name = model.Name,
             ChatTypeId = model.ChatTypeId,
