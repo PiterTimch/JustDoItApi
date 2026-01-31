@@ -1,32 +1,71 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
+    <meta charset="UTF-8">
+    <title>SignalR Chat Test</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        input, textarea, button {
+            margin: 4px 0;
+            width: 100%;
+        }
+
+        textarea {
+            height: 60px;
+        }
+
+        pre {
+            background: #111;
+            color: #0f0;
+            padding: 10px;
+            height: 200px;
+            overflow: auto;
+        }
+    </style>
 </head>
 <body>
-    <button onclick="connect()">Connect</button>
-    <button onclick="join()">Join Chat</button>
-    <button onclick="send()">Send</button>
 
-    <pre id="log"></pre>
+    <h3>🔐 JWT</h3>
+<textarea id="jwt" placeholder="Встав JWT токен"></textarea>
+
+    <h3>💬 Чат</h3>
+    <input id="chatId" type="number" placeholder="ID чату">
+
+    <h3>✉️ Повідомлення</h3>
+    <input id="message" type="text" placeholder="Текст повідомлення">
+
+    <button onclick="connect()">🔌 Connect</button>
+    <button onclick="join()">👥 Join Chat</button>
+    <button onclick="send()">📤 Send</button>
+
+    <h3>📜 Лог</h3>
+<pre id="log"></pre>
 
     <script>
         let connection;
 
         function log(msg) {
-            document.getElementById("log").innerText += msg + "\n";
+            const logEl = document.getElementById("log");
+            logEl.textContent += msg + "\n";
+            logEl.scrollTop = logEl.scrollHeight;
         }
 
         async function connect() {
+            const jwt = document.getElementById("jwt").value;
+
             connection = new signalR.HubConnectionBuilder()
                 .withUrl("http://localhost:5240/hubs/chat", {
-                    accessTokenFactory: () => "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwibmFtZSI6ItCQ0LTQvNGW0L0g0KHQuNGB0YLQtdC80L3QuNC5IiwiaW1hZ2UiOiJ4aGFpdTI1dy5wem8ud2VicCIsInJvbGUiOiJBZG1pbiIsImV4cCI6MTc2OTg0MTM2NH0.l24zmQIkjgzk8LLzJmHTSjoIaFfAv7BZC7FeC30z5Fo"
+                    accessTokenFactory: () => jwt
                 })
                 .withAutomaticReconnect()
                 .build();
 
             connection.on("ReceiveMessage", msg => {
-                log("📩 " + JSON.stringify(msg));
+                log("📩 ReceiveMessage: " + JSON.stringify(msg));
             });
 
             await connection.start();
@@ -34,16 +73,23 @@
         }
 
         async function join() {
-            await connection.invoke("JoinChat", 2);
-            log("👥 Joined chat");
+            const chatId = Number(document.getElementById("chatId").value);
+            await connection.invoke("JoinChat", chatId);
+            log(`👥 Joined chat ${chatId}`);
         }
 
         async function send() {
+            const chatId = Number(document.getElementById("chatId").value);
+            const message = document.getElementById("message").value;
+
             await connection.invoke("SendMessage", {
-                chatId: 2,
-                message: "Привіт з браузера"
+                chatId,
+                message
             });
+
+            log(`📤 Sent message to chat ${chatId}`);
         }
     </script>
+
 </body>
 </html>
