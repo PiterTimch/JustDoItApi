@@ -23,6 +23,11 @@ public class AppDbContext : IdentityDbContext<
     }
 
     public DbSet<ZadachaEntity> Zadachi { get; set; }
+    public DbSet<ChatEntity> Chats { get; set; }
+    public DbSet<ChatTypeEntity> ChatTypes { get; set; }
+    public DbSet<ChatMessageEntity> ChatMessages { get; set; }
+    public DbSet<ChatUserEntity> ChatUsers { get; set; }
+    public DbSet<ChatMessageReadEntity> ChatMessageReads { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
