@@ -12,11 +12,11 @@ services:
     ports:
       - "5192:5432"
     environment:
-      POSTGRES_DB: bolto-db
-      POSTGRES_USER: bolto-user
-      POSTGRES_PASSWORD: "sdfsd#rfetDGFDGd5ftydewftyd5y%$"
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - /data/bolto/postgres:/var/lib/postgresql
+      - ${VOLUME_POSTGRES}
     networks:
       - bolt_net
 
@@ -25,13 +25,14 @@ services:
     container_name: bolto-api-container
     restart: unless-stopped
     volumes:
-      - /data/bolto/images:/app/images
+      - ${VOLUME_SERVERAPI}
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=bolto-db;Username=bolto-user;Password=sdfsd#rfetDGFDGd5ftydewftyd5y%$"
+      ConnectionStrings__DefaultConnection: "Host=db;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
     ports:
       - "127.0.0.1:3589:8080"
     depends_on:
       - db
     networks:
       - bolt_net
+
