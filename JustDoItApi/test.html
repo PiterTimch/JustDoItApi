@@ -19,8 +19,8 @@
 
         async function connect() {
             connection = new signalR.HubConnectionBuilder()
-                .withUrl("http://0.0.0.0:5240/hubs/chat", {
-                    accessTokenFactory: () => "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwibmFtZSI6ItCQ0LTQvNGW0L0g0KHQuNGB0YLQtdC80L3QuNC5IiwiaW1hZ2UiOiJ4aGFpdTI1dy5wem8ud2VicCIsInJvbGUiOiJBZG1pbiIsImV4cCI6MTc2OTgzOTc0MX0._ilAscqytM_4XNDkWtd6vt5FydY7fiT3H7MKEdrZ2Bc"
+                .withUrl("http://localhost:5240/hubs/chat", {
+                    accessTokenFactory: () => "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwibmFtZSI6ItCQ0LTQvNGW0L0g0KHQuNGB0YLQtdC80L3QuNC5IiwiaW1hZ2UiOiJ4aGFpdTI1dy5wem8ud2VicCIsInJvbGUiOiJBZG1pbiIsImV4cCI6MTc2OTg0MTA4Mn0.HbM_G9K1wGYKyxguZnFrGDGzETYYso6JBy2BCrdMbR4"
                 })
                 .withAutomaticReconnect()
                 .build();
