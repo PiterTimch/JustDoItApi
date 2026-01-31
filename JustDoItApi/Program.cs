@@ -1,5 +1,6 @@
 using JustDoItApi.Data;
 using JustDoItApi.Entities.Identity;
+using JustDoItApi.Hubs;
 using JustDoItApi.Interfaces;
 using JustDoItApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -91,6 +92,7 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJWTTokenService, JWTTokenService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<IChatService, ChatService>();
 
 builder.Services.AddSignalR();
 
