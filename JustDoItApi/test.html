@@ -20,7 +20,7 @@
         async function connect() {
             connection = new signalR.HubConnectionBuilder()
                 .withUrl("http://localhost:5240/hubs/chat", {
-                    accessTokenFactory: () => "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwibmFtZSI6ItCQ0LTQvNGW0L0g0KHQuNGB0YLQtdC80L3QuNC5IiwiaW1hZ2UiOiJ4aGFpdTI1dy5wem8ud2VicCIsInJvbGUiOiJBZG1pbiIsImV4cCI6MTc2OTg0MTA4Mn0.HbM_G9K1wGYKyxguZnFrGDGzETYYso6JBy2BCrdMbR4"
+                    accessTokenFactory: () => "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwibmFtZSI6ItCQ0LTQvNGW0L0g0KHQuNGB0YLQtdC80L3QuNC5IiwiaW1hZ2UiOiJ4aGFpdTI1dy5wem8ud2VicCIsInJvbGUiOiJBZG1pbiIsImV4cCI6MTc2OTg0MTM2NH0.l24zmQIkjgzk8LLzJmHTSjoIaFfAv7BZC7FeC30z5Fo"
                 })
                 .withAutomaticReconnect()
                 .build();
@@ -34,13 +34,13 @@
         }
 
         async function join() {
-            await connection.invoke("JoinChat", 1);
+            await connection.invoke("JoinChat", 2);
             log("👥 Joined chat");
         }
 
         async function send() {
             await connection.invoke("SendMessage", {
-                chatId: 1,
+                chatId: 2,
                 message: "Привіт з браузера"
             });
         }

@@ -16,19 +16,10 @@ public class ChatService(
     {
         var userId = await identityService.GetUserIdAsync();
 
-        var chat = new ChatEntity // переробити на мапер
+        var chat = mapper.Map<ChatEntity>(model, opt =>
         {
-            Name = model.Name,
-            ChatTypeId = model.ChatTypeId,
-            ChatUsers = model.UserIds
-                .Append(userId)
-                .Distinct()
-                .Select(id => new ChatUserEntity
-                {
-                    UserId = id,
-                    IsAdmin = id == userId
-                }).ToList()
-        };
+            opt.Items["UserId"] = userId;
+        });
 
         context.Chats.Add(chat);
         await context.SaveChangesAsync();
