@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using JustDoItApi.Entities.Chat;
+using JustDoItApi.Entities.Identity;
 using JustDoItApi.Models.Chat;
-
-namespace JustDoItApi.Mapper;
 
 public class ChatMapper : Profile
 {
@@ -21,10 +20,19 @@ public class ChatMapper : Profile
                         {
                             UserId = id,
                             IsAdmin = id == currentUserId
-                        }).ToList();
+                        })
+                        .ToList();
                 }));
 
         CreateMap<ChatMessageEntity, ChatMessageModel>();
         CreateMap<ChatTypeEntity, ChatTypeItemModel>();
+
+        CreateMap<UserEntity, UserShortModel>()
+            .ForMember(dest => dest.Name,
+                opt => opt.MapFrom(src => src.FirstName + " " + src.LastName));
+
+        CreateMap<ChatEntity, ChatListItemModel>()
+            .ForMember(dest => dest.ChatId,
+                opt => opt.MapFrom(src => src.Id));
     }
 }

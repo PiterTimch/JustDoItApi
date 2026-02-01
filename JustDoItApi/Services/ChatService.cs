@@ -57,4 +57,33 @@ public class ChatService(
 
         return mapper.Map<ChatMessageModel>(message);
     }
+
+    public async Task<bool> IsUserInChat(long chatId, long userId)
+    {
+        return await context.ChatUsers
+            .AnyAsync(x => x.ChatId == chatId && x.UserId == userId);
+    }
+
+    public async Task<List<UserShortModel>> GetAllUsersAsync()
+    {
+        var users = await context.Users
+            .AsNoTracking()
+            .ToListAsync();
+
+        return mapper.Map<List<UserShortModel>>(users);
+    }
+
+    public async Task<List<ChatListItemModel>> GetMyChatsAsync()
+    {
+        var userId = await identityService.GetUserIdAsync();
+
+        var chats = await context.ChatUsers
+            .AsNoTracking()
+            .Where(cu => cu.UserId == userId)
+            .Select(cu => cu.Chat)
+            .ToListAsync();
+
+        return mapper.Map<List<ChatListItemModel>>(chats);
+    }
+
 }
