@@ -34,5 +34,8 @@ public class ChatMapper : Profile
         CreateMap<ChatEntity, ChatListItemModel>()
             .ForMember(dest => dest.ChatId,
                 opt => opt.MapFrom(src => src.Id));
+
+        CreateMap<ChatMessageEntity, ChatMessageModel>()
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName));
     }
 }
