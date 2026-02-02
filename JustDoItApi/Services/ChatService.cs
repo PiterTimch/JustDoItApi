@@ -86,4 +86,21 @@ public class ChatService(
         return mapper.Map<List<ChatListItemModel>>(chats);
     }
 
+    public async Task<List<ChatMessageModel>> GetChatMessagesAsync(long chatId)
+    {
+        var userId = await identityService.GetUserIdAsync();
+        var isMember = await context.ChatUsers
+            .AnyAsync(x => x.ChatId == chatId && x.UserId == userId);
+
+        if (!isMember) throw new UnauthorizedAccessException();
+
+        var messages = await context.ChatMessages
+            .AsNoTracking()
+            .Where(m => m.ChatId == chatId)
+            .OrderBy(m => m.Id)
+            .ToListAsync();
+
+        return mapper.Map<List<ChatMessageModel>>(messages);
+    }
+
 }

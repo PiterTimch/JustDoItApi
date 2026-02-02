@@ -10,4 +10,5 @@ public interface IChatService
     Task<List<UserShortModel>> GetAllUsersAsync();
     Task<List<ChatListItemModel>> GetMyChatsAsync();
     Task<bool> IsUserInChat(long chatId, long userId);
+    Task<List<ChatMessageModel>> GetChatMessagesAsync(long chatId);
 }
