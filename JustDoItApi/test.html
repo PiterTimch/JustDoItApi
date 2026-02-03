@@ -58,7 +58,7 @@
             const jwt = document.getElementById("jwt").value;
 
             connection = new signalR.HubConnectionBuilder()
-                .withUrl("http://localhost:5240/hubs/chat", {
+                .withUrl("http://local.task.test.com/hubs/chat", {
                     accessTokenFactory: () => jwt
                 })
                 .withAutomaticReconnect()
