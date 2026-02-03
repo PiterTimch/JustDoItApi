@@ -94,13 +94,16 @@ public class ChatService(
 
         if (!isMember) throw new UnauthorizedAccessException();
 
-        var messages = await context.ChatMessages
+        var entities = await context.ChatMessages
+            .Include(m => m.User)
             .AsNoTracking()
             .Where(m => m.ChatId == chatId)
             .OrderBy(m => m.Id)
             .ToListAsync();
 
-        return mapper.Map<List<ChatMessageModel>>(messages);
+        var messages = mapper.Map<List<ChatMessageModel>>(entities);
+
+        return messages;
     }
 
 }
