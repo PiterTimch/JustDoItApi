@@ -8,7 +8,7 @@ public interface IChatService
     Task EditChatAsync(ChatEditModel model);
     Task<ChatMessageModel> SendMessageAsync(SendMessageModel model);
     Task<List<ChatTypeItemModel>> GetAllTypes();
-    Task<List<UserShortModel>> GetAllUsersAsync();
+    Task<List<UserShortModel>> GetAllUsersAsync(UserSearchModel model);
     Task<List<ChatListItemModel>> GetMyChatsAsync();
     Task<bool> IsUserInChat(long chatId, long userId);
     Task<List<ChatMessageModel>> GetChatMessagesAsync(long chatId);

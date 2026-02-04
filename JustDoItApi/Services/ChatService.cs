@@ -64,12 +64,28 @@ public class ChatService(
             .AnyAsync(x => x.ChatId == chatId && x.UserId == userId);
     }
 
-    public async Task<List<UserShortModel>> GetAllUsersAsync()
+    public async Task<List<UserShortModel>> GetAllUsersAsync(UserSearchModel model)
     {
-        var users = await context.Users
+        var query = context.Users
             .AsNoTracking()
-            .ToListAsync();
+            .AsQueryable();
 
+        if (!string.IsNullOrWhiteSpace(model.Email))
+        {
+            var email = model.Email.Trim();
+            query = query.Where(u => u.Email!.Contains(email));
+        }
+
+        if (model.ChatId.HasValue)
+        {
+            var chatUserIds = context.ChatUsers
+                .Where(cu => cu.ChatId == model.ChatId.Value)
+                .Select(cu => cu.UserId);
+
+            query = query.Where(u => chatUserIds.Contains(u.Id));
+        }
+
+        var users = await query.ToListAsync();
         return mapper.Map<List<UserShortModel>>(users);
     }
 

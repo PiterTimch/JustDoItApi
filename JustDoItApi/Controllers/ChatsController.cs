@@ -32,9 +32,9 @@ public class ChatsController(IChatService chatService) : ControllerBase
     }
 
     [HttpGet("users")]
-    public async Task<IActionResult> GetUsers()
+    public async Task<IActionResult> GetUsers([FromQuery] UserSearchModel model)
     {
-        var users = await chatService.GetAllUsersAsync();
+        var users = await chatService.GetAllUsersAsync(model);
         return Ok(users);
     }
 
