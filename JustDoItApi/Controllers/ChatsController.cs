@@ -17,6 +17,13 @@ public class ChatsController(IChatService chatService) : ControllerBase
         return Ok(chatId);
     }
 
+    [HttpPut("edit")]
+    public async Task<IActionResult> EditChat([FromBody] ChatEditModel model)
+    {
+        await chatService.EditChatAsync(model);
+        return Ok();
+    }
+
     [HttpGet("types")]
     public async Task<IActionResult> GetChatTypes()
     {
