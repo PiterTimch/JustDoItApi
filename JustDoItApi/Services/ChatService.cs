@@ -123,4 +123,67 @@ public class ChatService(
 
         return chatAdminId == userId;
     }
+
+    public async Task EditChatAsync(ChatEditModel model)
+    {
+        var currentUserId = await identityService.GetUserIdAsync();
+
+        var chat = await context.Chats
+            .Include(c => c.ChatUsers)
+            .FirstOrDefaultAsync(c => c.Id == model.Id);
+
+        if (chat == null)
+            throw new KeyNotFoundException("Chat not found");
+
+        var isAdmin = chat.ChatUsers
+            .Any(cu => cu.UserId == currentUserId && cu.IsAdmin);
+
+        if (!isAdmin)
+            throw new UnauthorizedAccessException("User is not admin of the chat");
+
+        if (!string.IsNullOrWhiteSpace(model.Name))
+        {
+            chat.Name = model.Name.Trim();
+        }
+
+        if (model.AddUserIds?.Any() == true)
+        {
+            var existingUserIds = chat.ChatUsers
+                .Select(cu => cu.UserId)
+                .ToHashSet();
+
+            foreach (var userId in model.AddUserIds.Distinct())
+            {
+                if (existingUserIds.Contains(userId))
+                    continue;
+
+                chat.ChatUsers.Add(new ChatUserEntity
+                {
+                    UserId = userId,
+                    IsAdmin = false
+                });
+            }
+        }
+
+        if (model.RemoveUserIds?.Any() == true)
+        {
+            var usersToRemove = chat.ChatUsers
+                .Where(cu =>
+                    model.RemoveUserIds.Contains(cu.UserId) &&
+                    cu.UserId != currentUserId)
+                .ToList();
+
+            foreach (var cu in usersToRemove)
+            {
+                chat.ChatUsers.Remove(cu);
+            }
+        }
+
+        if (!chat.ChatUsers.Any(cu => cu.IsAdmin))
+            throw new InvalidOperationException("Chat must have at least one admin");
+
+        await context.SaveChangesAsync();
+    }
+
+
 }
