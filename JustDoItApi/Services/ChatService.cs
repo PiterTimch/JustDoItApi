@@ -106,4 +106,21 @@ public class ChatService(
         return messages;
     }
 
+    public async Task<bool> AmIAdminAsync(long chatId)
+    {
+        var chat = await context.Chats
+            .AsNoTracking()
+            .Include(c => c.ChatUsers)
+            .FirstOrDefaultAsync(c => c.Id == chatId);
+
+        if (chat == null)
+            throw new KeyNotFoundException("Chat not found");
+
+        var chatAdminId = chat.ChatUsers!
+            .FirstOrDefault(cu => cu.IsAdmin)?.UserId;
+
+        var userId = await identityService.GetUserIdAsync();
+
+        return chatAdminId == userId;
+    }
 }

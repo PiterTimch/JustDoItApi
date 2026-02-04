@@ -45,4 +45,11 @@ public class ChatsController(IChatService chatService) : ControllerBase
         return Ok(messages);
     }
 
+    [HttpGet("am-i-admin")]
+    public async Task<IActionResult> AmIAdmin([FromQuery] long chatId)
+    {
+        var isAdmin = await chatService.AmIAdminAsync(chatId);
+        return Ok(isAdmin);
+    }
+
 }

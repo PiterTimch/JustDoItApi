@@ -24,6 +24,23 @@ public class ChatMapper : Profile
                         .ToList();
                 }));
 
+        CreateMap<ChatEditModel, ChatEntity>()
+            .ForMember(dest => dest.ChatUsers, opt => opt.MapFrom(
+                (src, _, _, ctx) =>
+                {
+                    var currentUserId = (long)ctx.Items["UserId"];
+
+                    return src.UserIds
+                        .Append(currentUserId)
+                        .Distinct()
+                        .Select(id => new ChatUserEntity
+                        {
+                            UserId = id,
+                            IsAdmin = id == currentUserId
+                        })
+                        .ToList();
+                }));
+
         CreateMap<ChatMessageEntity, ChatMessageModel>();
         CreateMap<ChatTypeEntity, ChatTypeItemModel>();
 
