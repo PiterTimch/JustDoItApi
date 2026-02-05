@@ -59,4 +59,12 @@ public class ChatsController(IChatService chatService) : ControllerBase
         return Ok(isAdmin);
     }
 
+    [HttpPost("invite-link")]
+    public IActionResult GenerateInvite([FromBody] InviteRequest request)
+    {
+        var tokenService = new InviteTokenService();
+        var token = tokenService.Generate(request.ChatId);
+        var link = $"my-android://chat/invite?token={Uri.EscapeDataString(token)}";
+        return Ok(new { link });
+    }
 }
