@@ -70,10 +70,19 @@ public class ChatService(
             .AsNoTracking()
             .AsQueryable();
 
-        if (!string.IsNullOrWhiteSpace(model.Email))
+        if (!string.IsNullOrWhiteSpace(model.Query))
         {
-            var email = model.Email.Trim();
-            query = query.Where(u => u.Email!.Contains(email));
+            var search = model.Query.Trim().ToLower();
+
+            query = query.Where(u =>
+                (u.FirstName != null && u.FirstName.ToLower().Contains(search)) ||
+                (u.LastName != null && u.LastName.ToLower().Contains(search)) ||
+                (
+                    u.FirstName != null &&
+                    u.LastName != null &&
+                    (u.FirstName + " " + u.LastName).ToLower().Contains(search)
+                )
+            );
         }
 
         if (model.ChatId.HasValue)

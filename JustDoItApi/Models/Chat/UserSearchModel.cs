@@ -2,6 +2,6 @@
 
 public class UserSearchModel
 {
-    public string? Email { get; set; }
+    public string? Query { get; set; }
     public long? ChatId { get; set; }
 }
