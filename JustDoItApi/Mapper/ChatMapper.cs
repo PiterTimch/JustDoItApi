@@ -30,7 +30,6 @@ public class ChatMapper : Profile
             opt.Condition((src, dest, srcMember) => srcMember != null));
 
 
-        CreateMap<ChatMessageEntity, ChatMessageModel>();
         CreateMap<ChatTypeEntity, ChatTypeItemModel>();
 
         CreateMap<UserEntity, UserShortModel>()
@@ -42,6 +41,7 @@ public class ChatMapper : Profile
                 opt => opt.MapFrom(src => src.Id));
 
         CreateMap<ChatMessageEntity, ChatMessageModel>()
-            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName));
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName))
+            .ForMember(dest => dest.UserImage, opt => opt.MapFrom(src => src.User.Image));
     }
 }
