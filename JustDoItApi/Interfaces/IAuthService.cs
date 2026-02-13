@@ -6,5 +6,5 @@ public interface IAuthService
 {
     Task<string> LoginAsync(LoginModel model);
     Task<string> RegisterAsync(RegisterModel model);
-    Task EditProfileAsync(EditProfileModel model);
+    Task<string> EditProfileAsync(EditProfileModel model);
 }

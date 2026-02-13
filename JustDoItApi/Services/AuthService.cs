@@ -59,14 +59,14 @@ public class AuthService(
         return await tokenService.CreateTokenAsync(user);
     }
 
-    public async Task EditProfileAsync(EditProfileModel model)
+    public async Task<string> EditProfileAsync(EditProfileModel model)
     {
         var userId = await identityService.GetUserIdAsync();
 
         var user = await userManager.FindByIdAsync(Convert.ToString(userId));
 
         if (user == null)
-            return;
+            throw new Exception("User not found");
         mapper.Map(model, user);
         if (model.ImageFile != null)
         {
@@ -76,5 +76,7 @@ public class AuthService(
             user.Image = await imageService.SaveImageAsync(model.ImageFile);
         }
         await userManager.UpdateAsync(user);
+
+        return await tokenService.CreateTokenAsync(user);
     }
 }

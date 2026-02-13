@@ -57,12 +57,21 @@ namespace JustDoItApi.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> EditProfile([FromForm] EditProfileModel model)
         {
-            await authService.EditProfileAsync(model);
-            return Ok(new
-            {
-                Status = 200,
-                Message = "User updated"
-            });
+            try {
+                string result = await authService.EditProfileAsync(model);
+                return Ok(new
+                {
+                    Token = result
+                });
+            }
+            catch(Exception e) { 
+                return BadRequest(new
+                {
+                    Status = 400,
+                    IsValid = false,
+                    Errors = new { Email = e.Message }
+                });
+            }
         }
     }
 }
