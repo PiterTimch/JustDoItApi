@@ -1,6 +1,7 @@
 using JustDoItApi.Interfaces;
 using JustDoItApi.Models.Auth;
 using JustDoItApi.Models.Zadachi;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace JustDoItApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController (IAuthService authService) : ControllerBase
+    public class AuthController(IAuthService authService) : ControllerBase
     {
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
@@ -48,6 +49,19 @@ namespace JustDoItApi.Controllers
             return Ok(new
             {
                 Token = result
+            });
+        }
+
+        [Authorize]
+        [HttpPut("edit-profile")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> EditProfile([FromForm] EditProfileModel model)
+        {
+            await authService.EditProfileAsync(model);
+            return Ok(new
+            {
+                Status = 200,
+                Message = "User updated"
             });
         }
     }

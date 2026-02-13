@@ -13,5 +13,7 @@ public class AuthMapper : Profile
                 .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email));
         CreateMap<SeederUserModel, UserEntity>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email));
+        CreateMap<EditProfileModel, UserEntity>()
+                .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email));
     }
 }

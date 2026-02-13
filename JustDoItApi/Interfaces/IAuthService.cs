@@ -4,6 +4,7 @@ namespace JustDoItApi.Interfaces;
 
 public interface IAuthService
 {
-    public Task<string> LoginAsync(LoginModel model);
-    public Task<string> RegisterAsync(RegisterModel model);
+    Task<string> LoginAsync(LoginModel model);
+    Task<string> RegisterAsync(RegisterModel model);
+    Task EditProfileAsync(EditProfileModel model);
 }
